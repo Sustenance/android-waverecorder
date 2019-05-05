@@ -52,12 +52,16 @@ public class WaveRecorder {
         recordingThread.start();
     }
 
-    public void stopRecording(){
-        if(null != recorder){
+    public void stopRecording() {
+        this.stopRecording("" + System.currentTimeMillis());
+    }
+
+    public void stopRecording(String fileName){
+        if(recorder != null){
             isRecording = false;
 
-            int i = recorder.getState();
-            if(i==1)
+            int recorderState = recorder.getState();
+            if(recorderState == AudioRecord.STATE_INITIALIZED)
                 recorder.stop();
             recorder.release();
 
@@ -65,11 +69,11 @@ public class WaveRecorder {
             recordingThread = null;
         }
 
-        copyWaveFile(getTempFilename(),getFilename());
+        copyWaveFile(getTempFilename(), getFilename(fileName));
         deleteTempFile();
     }
 
-    private String getFilename(){
+    private String getFilename(String fileName){
         String filepath = Environment.getExternalStorageDirectory().getPath();
         File file = new File(filepath,AUDIO_RECORDER_FOLDER);
 
@@ -77,7 +81,7 @@ public class WaveRecorder {
             file.mkdirs();
         }
 
-        return (file.getAbsolutePath() + "/" + System.currentTimeMillis() + AUDIO_RECORDER_FILE_EXT_WAV);
+        return (file.getAbsolutePath() + "/" + fileName + AUDIO_RECORDER_FILE_EXT_WAV);
     }
 
     private String getTempFilename(){
@@ -110,7 +114,7 @@ public class WaveRecorder {
 
         int read = 0;
 
-        if(null != os){
+        if(os != null){
             while(isRecording){
                 read = recorder.read(data, 0, bufferSize);
 
