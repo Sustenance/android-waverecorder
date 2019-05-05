@@ -14,7 +14,6 @@ import java.io.IOException;
 public class WaveRecorder {
     private static final int RECORDER_BPP = 16;
     private static final String AUDIO_RECORDER_FILE_EXT_WAV = ".wav";
-    private static final String AUDIO_RECORDER_FOLDER = "AlarmAlert";
     private static final String AUDIO_RECORDER_TEMP_FILE = "record_temp.raw";
     private static final int RECORDER_SAMPLERATE = 44100;
     private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_STEREO;
@@ -24,8 +23,11 @@ public class WaveRecorder {
     private int bufferSize = 0;
     private Thread recordingThread = null;
     private boolean isRecording = false;
+    private String destinationFolderName;
 
-    public WaveRecorder () {
+
+    public WaveRecorder (String destinationFolderName) {
+        this.destinationFolderName = destinationFolderName;
         bufferSize = AudioRecord.getMinBufferSize(8000,
                 AudioFormat.CHANNEL_CONFIGURATION_MONO,
                 AudioFormat.ENCODING_PCM_16BIT);
@@ -75,7 +77,7 @@ public class WaveRecorder {
 
     private String getFilename(String fileName){
         String filepath = Environment.getExternalStorageDirectory().getPath();
-        File file = new File(filepath,AUDIO_RECORDER_FOLDER);
+        File file = new File(filepath, destinationFolderName);
 
         if(!file.exists()){
             file.mkdirs();
@@ -86,7 +88,7 @@ public class WaveRecorder {
 
     private String getTempFilename(){
         String filepath = Environment.getExternalStorageDirectory().getPath();
-        File file = new File(filepath,AUDIO_RECORDER_FOLDER);
+        File file = new File(filepath, destinationFolderName);
 
         if(!file.exists()){
             file.mkdirs();

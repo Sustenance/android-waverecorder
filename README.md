@@ -16,7 +16,7 @@ Based off of http://www.edumobile.org/android/audio-recording-in-wav-format-in-a
 For Android >= 6.0, make sure to [request app permissions](https://developer.android.com/training/permissions/requesting) at runtime.
 
 ```java
-WaveRecorder waveRecorder = new WaveRecorder();
+WaveRecorder waveRecorder = new WaveRecorder("DestinationFolderName");
 waveRecorder.startRecording();
 waveRecorder.stopRecording("fileName"); // Defaults to current timestamp
 ```
